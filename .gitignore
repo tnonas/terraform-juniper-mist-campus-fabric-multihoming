@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/terraform,macos,linux,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=terraform,macos,linux,windows
 
+### temp files ###
+/temp
+
 ### terraform-docs ###
 terraform-docs
 

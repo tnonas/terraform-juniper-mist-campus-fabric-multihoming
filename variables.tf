@@ -33,17 +33,15 @@ variable "name-prefix" {
     description = "A name prefix for resource naming. Please note that some names inside nested variables will have explicit names only."
 }
 
-variable "sites" { # Mandatory
-    type = map(object({
+variable "site" { # Mandatory
+    type = object({
         name           = string
         country_code   = string
         timezone       = string
         address        = string
         notes          = string
         latlng         = map(number)
-        switch_devices = list(string)
-        evpn_fabric     = any
-    }))
+    })
     description = "Definition of the sites to be deployed"
 }
 
@@ -53,13 +51,23 @@ variable "switch_root_password" { # Mandatory
     description = "Switches' root password."
 }
 
+variable "switches" {
+  type = any
+  description = "Switches added to the site to form EVPN fabric"
+}
+
 variable "switch_template" {
-    type = map(object({
+    type = object({
         name = string
         networks = any
         port_usages = any
         # disabled_system_defined_port_usages = any
         switch_matching = any
-     }))
+     })
     description = "Org level network templates for switches"
+}
+
+variable "evpn_fabric" {
+  type = any
+  description = "Site level EVPN fabric topology and fabric devices configiurations"
 }
