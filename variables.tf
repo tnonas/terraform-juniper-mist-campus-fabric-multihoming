@@ -61,6 +61,8 @@ variable "switch_template" {
         name = string
         networks = any
         port_usages = any
+        vrf_config = any
+        vrf_instances = any
         # disabled_system_defined_port_usages = any
         switch_matching = any
      })
