@@ -1,0 +1,161 @@
+#org_id = "" # In this example TF_VAR_org_id environment variable is used instead
+mist_cloud  = "api.mist.com"
+name-prefix = "tf-"
+site = {
+  name         = "lab8-collapsed-core"
+  country_code = "PL"
+  timezone     = "Europe/Warsaw"
+  address      = "Wrocław, Poland"
+  notes        = "Campus Fabric Multihoming Demo"
+  latlng = {
+    lat = 51.109295
+    lng = 17.038602
+  }
+}
+#switch_root_password = "" # In this example TF_VAR_switch_root_password environment variable is used instead
+switches = {
+  lab8-core-1 = {
+    name = "lab8-core-1"
+    role = "collapsed-core"
+    mac  = "0200040543a8"
+    port_config = {
+      "ge-0/0/0" : {
+        usage : "evpn_downlink"
+      },
+      "ge-0/0/1" : {
+        usage : "evpn_uplink"
+      },
+      "ge-0/0/2" : {
+        usage : "cores--lab8-access-1"
+        aggregated : true
+        esilag : true
+        ae_idx : 0
+      }
+    }
+    other_ip_configs = {
+      "vlan-10" : {
+        type : "static"
+        ip : "10.0.10.252"
+        netmask : "255.255.255.0"
+      }
+    }
+  }
+  lab8-core-2 = {
+    name = "lab8-core-2"
+    role = "collapsed-core"
+    mac  = "02000451a365"
+    port_config = {
+      "ge-0/0/0" : {
+        usage : "evpn_uplink"
+      },
+      "ge-0/0/1" : {
+        usage : "evpn_downlink"
+      },
+      "ge-0/0/2" : {
+        usage : "cores--lab8-access-1"
+        aggregated : true
+        esilag : true
+        ae_idx : 0
+      }
+    }
+    other_ip_configs = {
+      "vlan-10" : {
+        type : "static"
+        ip : "10.0.10.253"
+        netmask : "255.255.255.0"
+      }
+    }
+  }
+  lab8-access-1 = {
+    name = "lab8-access-1"
+    role = "esilag-access"
+    mac  = "020004ff7409"
+    port_config = {
+      "ge-0/0/1,ge-0/0/2" : {
+        usage : "cores--lab8-access-1"
+        aggregated : true
+        ae_idx : 0
+      }
+    }
+    other_ip_configs = {
+      "vlan-10" : {
+        type : "static"
+        ip : "10.0.10.10"
+        netmask : "255.255.255.0"
+      }
+    }
+  }
+}
+switch_template = {
+  name = "lab8-collapsed-core-st"
+  networks = {
+    vlan-10 = {
+      vlan_id = "10"
+      subnet  = "10.0.10.0/24"
+      gateway = "10.0.10.254"
+    },
+    vlan-20 = {
+      vlan_id = "20"
+      subnet  = "10.0.20.248/29"
+    }
+  }
+  port_usages = {
+    access-vlan-10 = {
+      mode         = "access"
+      port_network = "vlan-10"
+      poe_disabled = true
+      stp_edge     = false
+      mtu          = "9150"
+    },
+    cores--lab8-access-1 = {
+      mode         = "trunk"
+      networks     = ["vlan-10"]
+      poe_disabled = true
+      stp_edge     = false
+      mtu          = "9200"
+    }
+    cores--lab8-wan-1 = {
+      mode         = "trunk"
+      networks     = ["vlan-20"]
+      poe_disabled = true
+      stp_edge     = false
+      mtu          = "9100"
+    }
+  }
+  vrf_config = {
+    enabled = true
+  }
+  vrf_instances = {
+    "IP-VRF-1" = {
+      networks = ["vlan-10"]
+      extra_routes = {
+        "0.0.0.0/0" : {
+          via = "10.0.20.249"
+        }
+      }
+    }
+  }
+  switch_matching = {
+    enable = true
+    rules = [
+      {
+        name       = "tf-lab8-access-1"
+        match_name = "tf-lab8-access-1"
+        port_config = {
+          "ge-0/0/0" = {
+            usage = "access-vlan-10"
+          }
+        }
+      }
+    ]
+  }
+}
+evpn_fabric = {
+  name                   = "lab8-collapsed-core"
+  pod_name               = "MDF-1"
+  bgp_local_as           = "65000"
+  as_base                = "65001"
+  subnet                 = "3fff:1::/64"
+  auto_router_id_subnet6 = "3fff:2::/64"
+  auto_router_id_subnet  = "172.16.0.0/24"
+}
