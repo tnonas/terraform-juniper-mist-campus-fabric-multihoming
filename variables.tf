@@ -51,25 +51,38 @@ variable "switch_root_password" { # Mandatory
     description = "Switches' root password."
 }
 
-variable "switches" {
-  type = any
+variable "switches" { # Mandatory
+  type = map(object({
+    name = string
+    role = string
+    mac = string
+    port_config = any
+    other_ip_configs = any
+  }))
   description = "Switches added to the site to form EVPN fabric"
 }
 
-variable "switch_template" {
+variable "switch_template" { # Mandatory
     type = object({
         name = string
         networks = any
         port_usages = any
         vrf_config = any
         vrf_instances = any
-        # disabled_system_defined_port_usages = any
         switch_matching = any
      })
     description = "Org level network templates for switches"
 }
 
-variable "evpn_fabric" {
-  type = any
+variable "evpn_fabric" { # Mandatory
+  type = object({
+    name = string
+    pod_name = string
+    bgp_local_as = string
+    as_base = string
+    subnet = string
+    auto_router_id_subnet = string
+    auto_router_id_subnet6 = string
+  })
   description = "Site level EVPN fabric topology and fabric devices configiurations"
 }
