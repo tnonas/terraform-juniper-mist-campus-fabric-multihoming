@@ -51,14 +51,14 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_evpn_fabric"></a> [evpn\_fabric](#input\_evpn\_fabric) | Site level EVPN fabric topology and fabric devices configiurations | `any` | n/a | yes |
+| <a name="input_evpn_fabric"></a> [evpn\_fabric](#input\_evpn\_fabric) | Site level EVPN fabric topology and fabric devices configiurations | <pre>object({<br/>    name = string<br/>    pod_name = string<br/>    bgp_local_as = string<br/>    as_base = string<br/>    subnet = string<br/>    auto_router_id_subnet = string<br/>    auto_router_id_subnet6 = string<br/>  })</pre> | n/a | yes |
 | <a name="input_mist_cloud"></a> [mist\_cloud](#input\_mist\_cloud) | Target Juniper Mist Cloud API URL | `string` | n/a | yes |
 | <a name="input_name-prefix"></a> [name-prefix](#input\_name-prefix) | A name prefix for resource naming. Please note that some names inside nested variables will have explicit names only. | `string` | n/a | yes |
 | <a name="input_org_id"></a> [org\_id](#input\_org\_id) | Target Juniper Mist organization ID for all automation operations | `string` | n/a | yes |
 | <a name="input_site"></a> [site](#input\_site) | Definition of the sites to be deployed | <pre>object({<br/>        name           = string<br/>        country_code   = string<br/>        timezone       = string<br/>        address        = string<br/>        notes          = string<br/>        latlng         = map(number)<br/>    })</pre> | n/a | yes |
 | <a name="input_switch_root_password"></a> [switch\_root\_password](#input\_switch\_root\_password) | Switches' root password. | `string` | n/a | yes |
-| <a name="input_switch_template"></a> [switch\_template](#input\_switch\_template) | Org level network templates for switches | <pre>object({<br/>        name = string<br/>        networks = any<br/>        port_usages = any<br/>        vrf_config = any<br/>        vrf_instances = any<br/>        # disabled_system_defined_port_usages = any<br/>        switch_matching = any<br/>     })</pre> | n/a | yes |
-| <a name="input_switches"></a> [switches](#input\_switches) | Switches added to the site to form EVPN fabric | `any` | n/a | yes |
+| <a name="input_switch_template"></a> [switch\_template](#input\_switch\_template) | Org level network templates for switches | <pre>object({<br/>        name = string<br/>        networks = any<br/>        port_usages = any<br/>        vrf_config = any<br/>        vrf_instances = any<br/>        switch_matching = any<br/>     })</pre> | n/a | yes |
+| <a name="input_switches"></a> [switches](#input\_switches) | Switches added to the site to form EVPN fabric | <pre>map(object({<br/>    name = string<br/>    role = string<br/>    mac = string<br/>    port_config = any<br/>    other_ip_configs = any<br/>  }))</pre> | n/a | yes |
 
 ## Outputs
 
