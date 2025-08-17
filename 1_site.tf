@@ -41,4 +41,5 @@ resource "mist_device_switch" "this" {
   managed          = true
   port_config      = each.value.port_config
   other_ip_configs = each.value.other_ip_configs == null ? null : each.value.other_ip_configs # Check if other_ip_configs is not null then use
+  vrf_instances = each.value.vrf_instances == null ? null : each.value.vrf_instances
 }

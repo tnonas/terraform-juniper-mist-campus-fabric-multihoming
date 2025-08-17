@@ -1,0 +1,1 @@
+Please refer to the module's main README.md for example usage information.

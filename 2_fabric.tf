@@ -18,6 +18,8 @@ resource "mist_site_evpn_topology" "this" {
     }
     auto_router_id_subnet6 = var.evpn_fabric.auto_router_id_subnet6
     auto_router_id_subnet  = var.evpn_fabric.auto_router_id_subnet
+    auto_loopback_subnet6 = var.evpn_fabric.auto_loopback_subnet6
+    auto_loopback_subnet  = var.evpn_fabric.auto_loopback_subnet
   }
   switches = {
     "${var.switches["lab8-core-1"].mac}" = {
