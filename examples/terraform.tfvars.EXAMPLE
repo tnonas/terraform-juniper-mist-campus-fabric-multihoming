@@ -31,12 +31,33 @@ switches = {
         esilag : true
         ae_idx : 0
       }
+      "ge-0/0/3" : {
+        usage : "cores--lab8-wan-1"
+        aggregated : true
+        esilag : true
+        ae_idx : 1
+      }
     }
     other_ip_configs = {
       "vlan-10" : {
         type : "static"
         ip : "10.0.10.252"
         netmask : "255.255.255.0"
+      }
+      "vlan-20" : {
+        type : "static"
+        ip : "10.0.20.252"
+        netmask : "255.255.255.0"
+      }
+    }
+    vrf_instances = {
+      "IP-VRF-1" = {
+        networks = ["vlan-10", "vlan-20"]
+        extra_routes = {
+          "0.0.0.0/0" : {
+            via = "10.0.20.249"
+          }
+        }
       }
     }
   }
@@ -57,12 +78,33 @@ switches = {
         esilag : true
         ae_idx : 0
       }
+      "ge-0/0/3" : {
+        usage : "cores--lab8-wan-1"
+        aggregated : true
+        esilag : true
+        ae_idx : 1
+      }
     }
     other_ip_configs = {
       "vlan-10" : {
         type : "static"
         ip : "10.0.10.253"
         netmask : "255.255.255.0"
+      }
+      "vlan-20" : {
+        type : "static"
+        ip : "10.0.20.253"
+        netmask : "255.255.255.0"
+      }
+    }
+    vrf_instances = {
+      "IP-VRF-1" = {
+        networks = ["vlan-10", "vlan-20"]
+        extra_routes = {
+          "0.0.0.0/0" : {
+            via = "10.0.20.249"
+          }
+        }
       }
     }
   }
@@ -84,6 +126,16 @@ switches = {
         netmask : "255.255.255.0"
       }
     }
+    vrf_instances = {
+      "IP-VRF-1" = {
+        networks = ["vlan-10"]
+        extra_routes = {
+          "0.0.0.0/0" : {
+            via = "10.0.10.254"
+          }
+        }
+      }
+    }
   }
 }
 switch_template = {
@@ -97,6 +149,7 @@ switch_template = {
     vlan-20 = {
       vlan_id = "20"
       subnet  = "10.0.20.248/29"
+      gateway = "10.0.20.254"
     }
   }
   port_usages = {
@@ -158,4 +211,6 @@ evpn_fabric = {
   subnet                 = "3fff:1::/64"
   auto_router_id_subnet6 = "3fff:2::/64"
   auto_router_id_subnet  = "172.16.0.0/24"
+  auto_loopback_subnet6 = "3fff:3::/64"
+  auto_loopback_subnet  = "172.32.0.0/24"
 }
